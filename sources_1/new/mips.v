@@ -68,6 +68,15 @@ memory memory(clk, IorD? aluOut: pc, registerB, memRead, memWrite, memData);
 // Instruction Register
 instruction_register ir(clk, memData, instructionRegister);
 
+// Register
+registers registers(clk, 
+                    regWrite, 
+                    instructionRegister[25:21], 
+                    instructionRegister[20:16],
+                    regDst? instructionRegister[15:11]: instructionRegister[20:16],
+                    registerA,
+                    registerB);
+
 always @(posedge clk) begin
     mdr <= memData;
     

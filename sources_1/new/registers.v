@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/28/2020 08:35:19 PM
+// Create Date: 06/28/2020 09:21:06 PM
 // Design Name: 
-// Module Name: alu
+// Module Name: registers
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,24 +20,24 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module alu(
+module registers(
     input wire clk,
-    input wire [31:0] a,
-    input wire [31:0] b,
-    input wire [2:0] aluControl,
-    output reg [31:0] aluOut,
-    output reg zero
+    input wire regWrite,
+    input wire [5:0] readRegister1,
+    input wire [5:0] readRegister2,
+    input wire [5:0] writeRegister,
+    input wire [31:0] writeData,
+    output reg [31:0] a,
+    output reg [31:0] b
     );
     
+    reg[31:0] register[31:0];
+    
     always @(posedge clk) begin
-        case(aluControl)
-            3'b000: aluOut = a & b;
-            3'b001: aluOut = a | b;
-            3'b010: aluOut = a + b;
-            3'b110: aluOut = a - b;
-            3'b111: aluOut = a>b? 1: 0;
-        endcase
+        a = register[readRegister1];
+        b = register[readRegister2];
         
-        zero <= (aluOut == 0);
+        if (regWrite)
+            register[writeRegister] = writeData;
     end
 endmodule
