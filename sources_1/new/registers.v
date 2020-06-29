@@ -21,11 +21,10 @@
 
 
 module registers(
-    input wire clk,
     input wire regWrite,
-    input wire [5:0] readRegister1,
-    input wire [5:0] readRegister2,
-    input wire [5:0] writeRegister,
+    input wire [4:0] readRegister1,
+    input wire [4:0] readRegister2,
+    input wire [4:0] writeRegister,
     input wire [31:0] writeData,
     output reg [31:0] a,
     output reg [31:0] b
@@ -33,7 +32,7 @@ module registers(
     
     reg[31:0] register[31:0];
     
-    always @(posedge clk) begin
+    always @(*) begin
         a = register[readRegister1];
         b = register[readRegister2];
         

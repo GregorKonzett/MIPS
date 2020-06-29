@@ -21,23 +21,23 @@
 
 
 module alu(
-    input wire clk,
     input wire [31:0] a,
     input wire [31:0] b,
     input wire [2:0] aluControl,
+    output reg [31:0] aluResult,
     output reg [31:0] aluOut,
     output reg zero
     );
     
-    always @(posedge clk) begin
+    always @(*) begin
         case(aluControl)
-            3'b000: aluOut = a & b;
-            3'b001: aluOut = a | b;
-            3'b010: aluOut = a + b;
-            3'b110: aluOut = a - b;
-            3'b111: aluOut = a>b? 1: 0;
+            3'b000: aluResult = a & b;
+            3'b001: aluResult = a | b;
+            3'b010: aluResult = a + b;
+            3'b110: aluResult = a - b;
+            3'b111: aluResult = a>b? 1: 0;
         endcase
         
-        zero <= (aluOut == 0);
+        zero <= (aluResult == 0);
     end
 endmodule

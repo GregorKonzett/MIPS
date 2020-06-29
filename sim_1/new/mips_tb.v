@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/25/2020 08:57:00 PM
+// Create Date: 06/29/2020 07:08:55 PM
 // Design Name: 
-// Module Name: intsruction_register
+// Module Name: mips_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,16 +20,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module instruction_register(
-    input wire irWrite,
-    input wire[31:0] memData,
-    output reg[31:0] instructionRegister
-    );
+module mips_tb;
 
-    always @(irWrite) begin
-        if (irWrite) begin
-            instructionRegister <= memData;
-        end
-    end
-    
+reg clk;
+
+mips UUT(clk);
+
+initial begin
+    clk = 0;
+    #100 $finish;
+end
+
+
+always begin
+    #2 clk = !clk;
+end
+
 endmodule

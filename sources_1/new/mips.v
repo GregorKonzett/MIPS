@@ -38,48 +38,43 @@ wire aluSrcA;
 wire[1:0] aluSrcB;
 wire regWrite;
 wire regDst;
-wire[5:0] funct;
-reg[2:0] aluControl;
-reg[31:0] aluOut;
-reg[31:0] registerB;
-reg[31:0] registerA;
-wire[31:0] memData;
-reg[31:0] instructionRegister;
-reg[31:0] mdr;
-reg zero;
+wire[2:0] aluControl;
+wire[31:0] aluOut;
 wire[31:0] aluResult;
-
-assign funct = instructionRegister[5:0];
-
-// Generating the control signal for the ALU
-alucontrol alucontrol(aluOp, funct, aluControl);
-
+wire[31:0] registerB;
+wire[31:0] registerA;
+wire[31:0] memData;
+wire[31:0] instructionRegister;
+wire[31:0] mdr;
+wire zero;
 reg[31:0] aluB;
 
+initial pc = 32'b0;
+
+// Generating the control signal for the ALU
+alucontrol alucontrol(aluOp, instructionRegister[5:0], aluControl);
+
 // ALU
-alu alu(clk, aluSrcA? pc: registerA, aluB, aluControl, aluOut, zero);
+alu alu(aluSrcA? registerA: pc, aluB, aluControl, aluResult, aluOut, zero);
 
 // Control Signals
 control control(clk, instructionRegister[31:26], pcWriteCond, pcWrite, IorD, memRead, memWrite, memToReg, irWrite, pcSource, aluOp, aluSrcB, aluSrcA, regWrite, regDst);
 
 // Memory
-memory memory(clk, IorD? aluOut: pc, registerB, memRead, memWrite, memData);
+memory memory(IorD? aluOut: pc, registerB, memRead, memWrite, memData, mdr);
 
 // Instruction Register
-instruction_register ir(clk, memData, instructionRegister);
+instruction_register ir(irWrite, memData, instructionRegister);
 
 // Register
-registers registers(clk, 
-                    regWrite, 
+registers registers(regWrite, 
                     instructionRegister[25:21], 
                     instructionRegister[20:16],
                     regDst? instructionRegister[15:11]: instructionRegister[20:16],
                     registerA,
                     registerB);
 
-always @(posedge clk) begin
-    mdr <= memData;
-    
+always @(aluResult, aluOut, instructionRegister) begin
     // PC Logic
     if((zero & pcWriteCond) | pcWrite) begin
         case(pcSource)
@@ -88,7 +83,9 @@ always @(posedge clk) begin
             2'b11: pc <= {pc[31:28], instructionRegister[25:0] << 2};
         endcase
     end
-    
+end
+
+always @(aluSrcB) begin
     // ALU Src B
     case(aluSrcB)
         2'b00: aluB = registerB;

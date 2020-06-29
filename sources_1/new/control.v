@@ -32,10 +32,15 @@ module control (
     parameter AddiExecute = 4'b1010;
     parameter AddiWrite = 4'b1011;
     
+    initial state = InstructionFetch;
+    
     // State machine
     always @(posedge clk)
     begin
         state <= nextState;
+    end
+    
+    always @(state, op) begin
         case(state)
             InstructionFetch: nextState <= InstructionDecode;
             InstructionDecode: begin
@@ -89,6 +94,7 @@ module control (
                 irWrite = 1;
                 aluSrcB = 2'b01;
                 pcWrite = 1;
+                memRead = 1;
             end
             InstructionDecode: begin
                 aluSrcB = 2'b11;
