@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/28/2020 08:35:19 PM
+// Create Date: 07/16/2020 03:14:55 PM
 // Design Name: 
 // Module Name: alu
 // Project Name: 
@@ -24,20 +24,19 @@ module alu(
     input wire [31:0] a,
     input wire [31:0] b,
     input wire [2:0] aluControl,
-    output reg [31:0] aluResult,
-    output reg [31:0] aluOut,
-    output reg zero
+    output wire zero,
+    output reg [31:0] aluResult
     );
     
-    always @(*) begin
+    always @ * begin
         case(aluControl)
             3'b000: aluResult = a & b;
             3'b001: aluResult = a | b;
             3'b010: aluResult = a + b;
             3'b110: aluResult = a - b;
-            3'b111: aluResult = a>b? 1: 0;
+            3'b111: aluResult = a<b? 1: 0;
         endcase
-        
-        zero <= (aluResult == 0);
     end
+    
+    assign zero = (aluResult == 0? 0: 1);
 endmodule

@@ -26,6 +26,7 @@ reg clk;
 
 mips UUT(clk);
 
+
 initial begin
     clk = 0;
     #100 $finish;

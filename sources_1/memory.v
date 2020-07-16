@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/25/2020 09:09:16 PM
+// Create Date: 07/11/2020 06:24:56 PM
 // Design Name: 
-// Module Name: pc
+// Module Name: memory
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,16 +20,27 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc(
+module memory(
     input wire clk,
-    input wire zero,
-    input wire pcWriteCond,
-    input wire pcWrite,
-    inout wire[31:0] pc
+    input wire [31:0] address,
+    input wire [31:0] writeData,
+    input wire memRead,
+    input wire memWrite,
+    output wire [31:0] memData
     );
     
+    reg[31:0] dataMemory[255:0];
+    
+    initial begin
+        $readmemb("instructions.mem", dataMemory);
+    end
+    
+    assign memData = memRead? dataMemory[address]: 32'bx;
+    
     always @(posedge clk) begin
-        
+        if(memWrite) begin
+            dataMemory[address] = writeData;
+        end
     end
     
 endmodule

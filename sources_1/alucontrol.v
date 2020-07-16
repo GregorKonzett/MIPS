@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/20/2020 04:12:28 PM
+// Create Date: 07/16/2020 03:26:46 PM
 // Design Name: 
 // Module Name: alucontrol
 // Project Name: 
@@ -18,16 +18,16 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-// http://fourier.eng.hmc.edu/e85_old/lectures/processor/node5.html
+
 
 module alucontrol(
-    input wire[1:0] aluOp,
-    input wire[5:0] funct,
-    output reg[2:0] aluControl
+    input wire clk,
+    input wire [2:0] aluOp,
+    input wire [5:0] funct,
+    output reg [2:0] aluControl
     );
-   
-    always @(aluOp, funct)
-    begin
+    
+    always @(posedge clk) begin
         case (aluOp)
             2'b00: aluControl = 3'b010;            // (addi, lw, sw)
             2'b01: aluControl = 3'b110;            //  - (beq, bne)

@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/28/2020 09:21:06 PM
+// Create Date: 07/16/2020 03:08:42 PM
 // Design Name: 
 // Module Name: registers
 // Project Name: 
@@ -21,22 +21,26 @@
 
 
 module registers(
+    input wire clk,
     input wire regWrite,
-    input wire [4:0] readRegister1,
-    input wire [4:0] readRegister2,
-    input wire [4:0] writeRegister,
-    input wire [31:0] writeData,
-    output reg [31:0] a,
-    output reg [31:0] b
+    input wire readRegister1,
+    input wire readRegister2,
+    input wire [31:0] address,
+    input wire [31:0] data,
+    output reg [31:0] readData1,
+    output reg[31:0] readData2
     );
     
-    reg[31:0] register[31:0];
+    reg [31:0] registers [31:0];
     
-    always @(*) begin
-        a = register[readRegister1];
-        b = register[readRegister2];
+     // Registers
+    always @(posedge clk) begin
+        readData1 <= registers[readRegister1];
+        readData2 <= registers[readRegister2];
         
-        if (regWrite)
-            register[writeRegister] = writeData;
+        if(regWrite) begin
+            registers[address] <= data;
+        end
     end
+    
 endmodule
