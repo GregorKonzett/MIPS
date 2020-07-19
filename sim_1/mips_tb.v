@@ -21,20 +21,17 @@
 
 
 module mips_tb;
+    reg clk;
 
-reg clk;
+	mips UUT(clk);
 
-mips UUT(clk);
+	initial
+		forever #5 clk=~clk;
 
+	initial begin
+	clk=0;
 
-initial begin
-    clk = 0;
-    #100 $finish;
-end
-
-
-always begin
-    #2 clk = !clk;
-end
+	#6000 $finish;
+	end
 
 endmodule

@@ -36,7 +36,7 @@ module control(
     output reg aluSrcA,
     output reg regWrite,
     output reg regDst,
-    output reg [2:0] aluControl
+    output wire [2:0] aluControl
     );
     
     reg [2:0] aluOp;

@@ -23,9 +23,9 @@
 module registers(
     input wire clk,
     input wire regWrite,
-    input wire readRegister1,
-    input wire readRegister2,
-    input wire [31:0] address,
+    input wire [4:0] readRegister1,
+    input wire [4:0] readRegister2,
+    input wire [4:0] address,
     input wire [31:0] data,
     output reg [31:0] readData1,
     output reg[31:0] readData2

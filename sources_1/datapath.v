@@ -39,22 +39,27 @@ module datapath(
     output wire [5:0] funct
     );
     
-    wire memData;
+    wire [31:0] memData;
     wire zero;
     wire [31:0] aluResult;
     reg [31:0] aluOut;
     reg [31:0] pc;
     reg[31:0] instructionRegister;
     
-    reg [31:0] registerB;
-    reg [31:0] registerA;
+    wire [31:0] registerA;
+    wire [31:0] registerB;
     reg [31:0] aluInputB;
     reg [31:0] mdr;
+    
+    initial begin
+        $display("Initial setup");
+        pc = 32'b0;
+    end
     
     // Memory
     memory memory(
         clk,
-        iOrd? aluOut: pc,
+        iOrD? aluOut: pc,
         registerB,
         memRead,
         memWrite,
@@ -114,9 +119,9 @@ module datapath(
     always @(posedge clk) begin
         if((zero && pcWriteCond) || pcWrite) begin
             case(pcSource)
-                2'b00: pc <= aluResult;
-                2'b01: pc <= aluOut;
-                2'b10: pc <= {pc[31:28], instructionRegister[25:0] << 2};
+                2'b00: pc = aluResult;
+                2'b01: pc = aluOut;
+                2'b10: pc = {pc[31:28], instructionRegister[25:0] << 2};
              endcase
         end
     end
