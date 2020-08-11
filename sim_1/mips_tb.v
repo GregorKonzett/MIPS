@@ -26,7 +26,7 @@ module mips_tb;
 	mips UUT(clk);
 
 	initial
-		forever #5 clk=~clk;
+		forever #5 clk=!clk;
 
 	initial begin
 	clk=0;

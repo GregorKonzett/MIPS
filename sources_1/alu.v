@@ -30,11 +30,11 @@ module alu(
     
     always @ * begin
         case(aluControl)
-            3'b000: aluResult = a & b;
-            3'b001: aluResult = a | b;
-            3'b010: aluResult = a + b;
-            3'b110: aluResult = a - b;
-            3'b111: aluResult = a<b? 1: 0;
+            3'b000: aluResult <= a & b;
+            3'b001: aluResult <= a | b;
+            3'b010: aluResult <= a + b;
+            3'b110: aluResult <= a - b;
+            3'b111: aluResult <= a<b? 1: 0;
         endcase
     end
     

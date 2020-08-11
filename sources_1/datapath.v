@@ -19,6 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+parameter PCSTART = 32'b0;
 
 module datapath(
     input wire clk,
@@ -53,7 +54,7 @@ module datapath(
     
     initial begin
         $display("Initial setup");
-        pc = 32'b0;
+        pc = PCSTART;
     end
     
     // Memory
@@ -96,9 +97,9 @@ module datapath(
     // Assign input B for ALU
     always @ * begin
         case(aluSrcB)
-            2'b00: aluInputB <= registerB;
-            2'b01: aluInputB <= 4;
-            2'b10: aluInputB <= {{(16){instructionRegister[15]}},instructionRegister[15:0]};
+            2'b00: aluInputB = registerB;
+            2'b01: aluInputB = 4;
+            2'b10: aluInputB = {{(16){instructionRegister[15]}},instructionRegister[15:0]};
         endcase
     end
     
@@ -109,10 +110,10 @@ module datapath(
     
     // Instruction Register
     always @(posedge clk) begin
-        mdr <= memData;
+        mdr = memData;
         
         if(irWrite)
-            instructionRegister <= memData;
+            instructionRegister = memData;
     end
     
     //Pc Logic

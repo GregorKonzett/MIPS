@@ -26,7 +26,7 @@ module memory(
     input wire [31:0] writeData,
     input wire memRead,
     input wire memWrite,
-    output wire [31:0] memData
+    output [31:0] memData
     );
     
     reg[31:0] dataMemory[255:0];
@@ -35,7 +35,7 @@ module memory(
         $readmemb("instructions.mem", dataMemory);
     end
     
-    assign memData = memRead? dataMemory[address]: 32'bx;
+    assign memData = memRead? dataMemory[address]: 32'b00000000001111111111000000001111;
     
     always @(posedge clk) begin
         if(memWrite) begin

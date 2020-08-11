@@ -27,21 +27,15 @@ module alucontrol(
     output reg [2:0] aluControl
     );
     
-    always @(posedge clk) begin
-        case (aluOp)
-            2'b00: aluControl <= 3'b010;            // (addi, lw, sw)
-            2'b01: aluControl <= 3'b110;            //  - (beq, bne)
-            2'b1x: begin
-                case (funct)
-                    32: aluControl <= 3'b010;       // add
-                    34: aluControl <= 3'b110;       // sub
-                    36: aluControl <= 3'b000;       // and
-                    37: aluControl <= 3'b001;       // or
-                    42: aluControl <= 3'b111;       // slt
-                    default: aluControl <= 3'bxxx;  // undefined
-                endcase
-            end
-            default: aluControl <= 3'bxxx;          // undefined
+    always @* begin
+        casex ({aluOp, funct})
+            8'b00_xxxxxx: aluControl = 3'b010;            // (addi, lw, sw)
+            8'b01_xxxxxx: aluControl = 3'b110;            //  - (beq, bne)
+            8'b01_100000: aluControl = 3'b110;            // add
+            8'b01_100010: aluControl = 3'b110;            // sub
+            8'b01_100100: aluControl = 3'b110;            // and
+            8'b01_100101: aluControl = 3'b110;            // or
+            8'b01_101010: aluControl = 3'b110;            // slt
         endcase
     end
 endmodule

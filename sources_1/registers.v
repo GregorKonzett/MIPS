@@ -35,11 +35,11 @@ module registers(
     
      // Registers
     always @(posedge clk) begin
-        readData1 <= registers[readRegister1];
-        readData2 <= registers[readRegister2];
+        readData1 = registers[readRegister1];
+        readData2 = registers[readRegister2];
         
         if(regWrite) begin
-            registers[address] <= data;
+            registers[address] = data;
         end
     end
     
